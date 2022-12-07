@@ -76,28 +76,18 @@ function aparellaGent($noms): array
  */
 function enviaCorreus($parelles, $correus): void
 {
-
-    /*
-    $to      = 'nobody@example.com';
-    $subject = 'the subject';
-    $message = 'hello';
-    $headers = 'From: webmaster@example.com'       . "\r\n" .
-                 'Reply-To: webmaster@example.com' . "\r\n" .
-                 'X-Mailer: PHP/' . phpversion();
-
-    mail($to, $subject, $message, $headers);
-    */
-
-    $subject = "NADAL 2022 :: a qui li fas el regal d\'amic o amiga invisible esta en aquest missatge :) !";
-    $headers = 'From: amicinvisible@danielribes.com'       . "\r\n" .
-               'Reply-To: amicinvisible@danielribes.com' . "\r\n" .
-               'X-Mailer: PHP/' . phpversion();
+    
+    $headers = 'From: amicinvisible@danielribes.com'. "\r\n".
+               'Reply-To: amicinvisible@danielribes.com'. "\r\n".
+               'Bcc: pixelsybytes@danielribes.com'. "\r\n".
+               'X-Mailer: PHP/'. phpversion();
     foreach($parelles as $unaParella)
     {
         $nomfa = $unaParella[0];
         $nomrep = $unaParella[1];
         $emaildesti = $correus[$nomfa];
-        $missatge = "Hola $nomfa!!,\r\n\r\n T'ha tocat fer-li un regal a $nomrep.\r\n\r\n";
+        $subject = "NADAL 2022 :: AMIC INVISIBLE de la família. $nomfa aquest missatge és només per mirar-lo tu!";
+        $missatge = "Hola $nomfa!!,\r\n\r\nT'ha tocat fer-li un regal a *** ==> $nomrep <== *** :)\r\n\r\nRecorda que n'hi ha prou amb una manualitat o un detallet que no superi els 5€";
         mail($emaildesti, $subject, $missatge, $headers);
         echo "Enviat a $nomfa ($emaildesti)".PHP_EOL;
     }
