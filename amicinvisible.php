@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 // =================================================================
 //  Config
 // =================================================================
@@ -14,7 +16,7 @@
 //              'Nom3' => 'email3@mail.com',
 //              (...)
 //
-//  Aquesta fitxer 'gent.php' es deixa fora del git
+//  Aquest fitxer 'gent.php' es deixa fora del git
 //
 // -----------------------------------------------------------------
 
@@ -28,23 +30,56 @@ $parelles = [];
 $nomsA = array_keys($correus);
 shuffle($nomsA);
 
-$i = 0;
-foreach($nomsA as $unNom)
+$parelles = aparellaGent($nomsA);
+enviaCorreus($parelles, $correus);
+
+
+// =================================================================
+//  Helpers
+// =================================================================
+
+/**
+ * Retorna un array d'arrays associatius amb la gent aparellada
+ * posant primer qui envia i segon qui rep.
+ *
+ * @param Array $noms
+ * @return Array 
+ */
+function aparellaGent($noms): array
 {
-    if($unNom == $nomsA[count($nomsA)-1])
+    $lesparelles = [];
+    $ultimnom = count($noms)-1;
+    $i = 0;
+    foreach($noms as $unNom)
     {
-        $parelles[] = [$unNom, $nomsA[0]];
-    } else {
-        $parelles[] = [$unNom, $nomsA[$i +1]];
+        if($unNom == $noms[$ultimnom])
+        {
+            $lesparelles[] = [$unNom, $noms[0]];
+        } else {
+            $lesparelles[] = [$unNom, $noms[$i +1]];
+        }
+        $i++;
     }
-    $i++;
+
+    return $lesparelles;
 }
 
-foreach($parelles as $unaParella)
+
+/**
+ * Crea i envia els correus a cada destinatari
+ *
+ * @param Array $parelles Array associatiu amb les parelles de gent
+ * @param Array $correus Array amb noms i e-mails de cada persona
+ * @return void
+ */
+function enviaCorreus($parelles, $correus): void
 {
-    $nomfa = $unaParella[0];
-    $nomrep = $unaParella[1];
-    $email = $correus[$nomfa];
-    echo "Hola $nomfa ($email) El teu amic/ga és: $nomrep";
-    echo PHP_EOL;
+    foreach($parelles as $unaParella)
+    {
+        $nomfa = $unaParella[0];
+        $nomrep = $unaParella[1];
+        $email = $correus[$nomfa];
+        echo "Hola $nomfa ($email) El teu amic/ga és: $nomrep";
+        echo PHP_EOL;
+    }
 }
