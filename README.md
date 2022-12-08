@@ -13,8 +13,8 @@ El fitxer __amicinvisible.php__ espera un fitxer anomenat __gent.php__ amb un ar
 Exemple:
 ```php
 $correus = ['Nom1' => 'email1@mail.com',
-              'Nom2' => 'email2@mail.com',
-              'Nom3' => 'email3@mail.com',
+            'Nom2' => 'email2@mail.com',
+            'Nom3' => 'email3@mail.com',
               (...)
 ```
 En aquest fitxer també definim les variables per l'enviament
