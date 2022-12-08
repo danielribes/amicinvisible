@@ -2,10 +2,6 @@
 
 declare(strict_types=1);
 
-// =================================================================
-//  Config
-// =================================================================
-
 // -----------------------------------------------------------------
 //  Espera un fitxer 'gent.php' amb un array associatiu anomenat
 //  $correus on la 'key' és el nom i el 'value' és el e-mail,
@@ -16,6 +12,13 @@ declare(strict_types=1);
 //              'Nom3' => 'email3@mail.com',
 //              (...)
 //
+// En aquest fitxer també definim les variables per l'enviament
+// de correu:
+//
+// $fromEmail
+// $replyEmail
+// $bccEmail
+// 
 //  Aquest fitxer 'gent.php' es deixa fora del git
 //
 // -----------------------------------------------------------------
@@ -28,11 +31,8 @@ require_once('gent.php');
 
 $parelles = [];
 $nomsA = array_keys($correus);
-shuffle($nomsA);
-
 $parelles = aparellaGent($nomsA);
-enviaCorreus($parelles, $correus);
-
+enviaCorreus($parelles, $correus, $fromEmail, $replyEmail, $bccEmail);
 echo PHP_EOL."Enviats!".PHP_EOL;
 
 
@@ -49,21 +49,23 @@ echo PHP_EOL."Enviats!".PHP_EOL;
  */
 function aparellaGent($noms): array
 {
-    $lesparelles = [];
-    $ultimnom = count($noms)-1;
+    shuffle($noms);
+
+    $lesParelles = [];
+    $ultimNom = count($noms)-1;
     $i = 0;
     foreach($noms as $unNom)
     {
-        if($unNom == $noms[$ultimnom])
+        if($unNom == $noms[$ultimNom])
         {
-            $lesparelles[] = [$unNom, $noms[0]];
+            $lesParelles[] = [$unNom, $noms[0]];
         } else {
-            $lesparelles[] = [$unNom, $noms[$i +1]];
+            $lesParelles[] = [$unNom, $noms[$i +1]];
         }
         $i++;
     }
 
-    return $lesparelles;
+    return $lesParelles;
 }
 
 
@@ -74,19 +76,19 @@ function aparellaGent($noms): array
  * @param Array $correus Array amb noms i e-mails de cada persona
  * @return void
  */
-function enviaCorreus($parelles, $correus): void
+function enviaCorreus($parelles, $correus, $fromEmail, $replyEmail, $bccEmail): void
 {
     
-    $headers = 'From: amicinvisible@danielribes.com'. "\r\n".
-               'Reply-To: amicinvisible@danielribes.com'. "\r\n".
-               'Bcc: pixelsybytes@danielribes.com'. "\r\n".
+    $headers = "From: $fromEmail\r\n".
+               "Reply-To: $replyEmail\r\n".
+               "Bcc: $bccEmail\r\n".
                'X-Mailer: PHP/'. phpversion();
     foreach($parelles as $unaParella)
     {
         $nomfa = $unaParella[0];
         $nomrep = $unaParella[1];
         $emaildesti = $correus[$nomfa];
-        $subject = "NADAL 2022 :: AMIC INVISIBLE de la família. $nomfa aquest missatge és només per mirar-lo tu!";
+        $subject = "Bon Nadal! :: AMIC INVISIBLE de la família. $nomfa aquest missatge és només per mirar-lo tu!";
         $missatge = "Hola $nomfa!!,\r\n\r\nT'ha tocat fer-li un regal a *** ==> $nomrep <== *** :)\r\n\r\nRecorda que n'hi ha prou amb una manualitat o un detallet que no superi els 5€";
         mail($emaildesti, $subject, $missatge, $headers);
         echo "Enviat a $nomfa ($emaildesti)".PHP_EOL;
